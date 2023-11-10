@@ -20,7 +20,7 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 100, nullable = false, unique = true)
+    @Column(length = 100, nullable = false)
     private String user;
 
     @Column(length = 200, nullable = false)
@@ -28,7 +28,7 @@ public class User implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 100, nullable = false)
-    private Role role;
+    private Role role = Role.ROLE_CLIENT;
 
     @Column
     private LocalDateTime createDate;

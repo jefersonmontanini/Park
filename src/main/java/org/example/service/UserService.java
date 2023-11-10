@@ -5,9 +5,9 @@ import org.example.entity.User;
 import org.example.repository.UsersRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,11 +27,17 @@ public class UserService {
     }
 
     @Transactional
-    public User updatePassword(long id, String password) {
+    public User updatePassword(long id, String currentPassword, String newPassword, String confirmNewPassword) {
+        if (!newPassword.equals(confirmNewPassword)) {
+            throw new RuntimeException("O campo Nova senha e Confirmar senha devcem ser iguais");
+        }
         return users.findById(id)
                 .map( user -> {
-                    user.setPassword(password);
-                    return user;
+                    if (!user.getPassword().equals(currentPassword)) {
+                        throw new RuntimeException("A senha atual está incorreta");
+                    }
+                        user.setPassword(newPassword);
+                        return user;
                 } )
                 .orElseThrow( ()-> new RuntimeException("Usuario nao encontrado") );
     }

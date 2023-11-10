@@ -1,10 +1,12 @@
 package org.example.web.controller;
 
-import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import org.example.entity.User;
 import org.example.service.UserService;
-import org.springframework.data.repository.query.Param;
+import org.example.web.DTO.UserCreateDTO;
+import org.example.web.DTO.UserPasswordDTO;
+import org.example.web.DTO.UserResponseDTO;
+import org.example.web.DTO.mapper.UserMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,21 +21,21 @@ public class userController {
     private final UserService userService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getById(@PathVariable Long id) {
+    public ResponseEntity<UserResponseDTO> getById(@PathVariable Long id) {
         User userById = userService.getById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(userById);
+        return ResponseEntity.status(HttpStatus.OK).body(UserMapper.userToDto(userById));
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAll() {
+    public ResponseEntity<List<UserResponseDTO>> getAll() {
         List<User> all = userService.getAll();
-        return ResponseEntity.status(HttpStatus.OK).body(all);
+        return ResponseEntity.status(HttpStatus.OK).body(UserMapper.toListDto(all));
     }
 
     @PostMapping
-    public ResponseEntity<User> create(@RequestBody User user) {
-        User savedUser = userService.save(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+    public ResponseEntity<UserResponseDTO> create(@RequestBody UserCreateDTO userDTO) {
+        User savedUser = userService.save(UserMapper.dtoToUser(userDTO));
+        return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.userToDto(savedUser));
     }
 
     @PutMapping("/{id}")
@@ -44,11 +46,11 @@ public class userController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<User> updatePassword(@PathVariable long id,
-                       @RequestBody User user) {
+    public ResponseEntity<Void> updatePassword(@PathVariable long id,
+                                               @RequestBody UserPasswordDTO dto) {
 
-        User userUpdated = userService.updatePassword(id, user.getPassword());
-        return ResponseEntity.ok(userUpdated);
+        User userUpdated = userService.updatePassword(id, dto.getCurrentPassword(), dto.getNewPassword(), dto.getConfirmNewPassword());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @DeleteMapping("/{id}")
