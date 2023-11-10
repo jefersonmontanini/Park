@@ -1,4 +1,4 @@
-package org.example.web.DTO.mapper;
+package org.example.web.DTO.ResponseMapper;
 
 import org.example.entity.User;
 import org.example.web.DTO.UserResponseDTO;

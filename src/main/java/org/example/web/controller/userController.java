@@ -1,12 +1,13 @@
 package org.example.web.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.entity.User;
 import org.example.service.UserService;
 import org.example.web.DTO.UserCreateDTO;
 import org.example.web.DTO.UserPasswordDTO;
 import org.example.web.DTO.UserResponseDTO;
-import org.example.web.DTO.mapper.UserMapper;
+import org.example.web.DTO.ResponseMapper.UserMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,7 @@ public class userController {
     }
 
     @PostMapping
-    public ResponseEntity<UserResponseDTO> create(@RequestBody UserCreateDTO userDTO) {
+    public ResponseEntity<UserResponseDTO> create(@Valid @RequestBody UserCreateDTO userDTO) {
         User savedUser = userService.save(UserMapper.dtoToUser(userDTO));
         return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.userToDto(savedUser));
     }
