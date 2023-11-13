@@ -2,12 +2,12 @@ package org.example.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.entity.User;
+import org.example.exception.UserNameUniqueViolationException;
 import org.example.repository.UsersRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,7 +17,11 @@ public class UserService {
 
     @Transactional
     public User save(User user) {
-        return users.save(user);
+        try {
+            return users.save(user);
+        }catch (org.springframework.dao.DataIntegrityViolationException exception) {
+            throw new UserNameUniqueViolationException(String.format("Username {%s} ja cadastrado", user.getUser()));
+        }
     }
 
     @Transactional(readOnly = true)

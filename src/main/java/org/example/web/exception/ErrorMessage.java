@@ -1,5 +1,6 @@
 package org.example.web.exception;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +20,7 @@ public class ErrorMessage {
     private int status;
     private String statusMessage;
     private String errorMessage;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Map<String, String> errors;
 
     public ErrorMessage() {

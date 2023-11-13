@@ -12,7 +12,7 @@ import lombok.*;
 @ToString
 public class UserCreateDTO {
 
-    @Email(message = "O email deve ser valido")
+
     private String user;
     @NotBlank()
     @Size(min = 4, max = 10)
