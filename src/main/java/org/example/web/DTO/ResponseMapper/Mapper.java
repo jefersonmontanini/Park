@@ -9,7 +9,7 @@ import org.modelmapper.PropertyMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class UserMapper {
+public class Mapper {
 
     public static User dtoToUser(UserCreateDTO createDTO) {
         return new ModelMapper().map(createDTO, User.class);

@@ -7,7 +7,7 @@ import org.example.service.UserService;
 import org.example.web.DTO.UserCreateDTO;
 import org.example.web.DTO.UserPasswordDTO;
 import org.example.web.DTO.UserResponseDTO;
-import org.example.web.DTO.ResponseMapper.UserMapper;
+import org.example.web.DTO.ResponseMapper.Mapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,19 +24,19 @@ public class userController {
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDTO> getById(@PathVariable Long id) {
         User userById = userService.getById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(UserMapper.userToDto(userById));
+        return ResponseEntity.status(HttpStatus.OK).body(Mapper.userToDto(userById));
     }
 
     @GetMapping
     public ResponseEntity<List<UserResponseDTO>> getAll() {
         List<User> all = userService.getAll();
-        return ResponseEntity.status(HttpStatus.OK).body(UserMapper.toListDto(all));
+        return ResponseEntity.status(HttpStatus.OK).body(Mapper.toListDto(all));
     }
 
     @PostMapping
     public ResponseEntity<UserResponseDTO> create(@Valid @RequestBody UserCreateDTO userDTO) {
-        User savedUser = userService.save(UserMapper.dtoToUser(userDTO));
-        return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.userToDto(savedUser));
+        User savedUser = userService.save(Mapper.dtoToUser(userDTO));
+        return ResponseEntity.status(HttpStatus.CREATED).body(Mapper.userToDto(savedUser));
     }
 
     @PutMapping("/{id}")
@@ -47,7 +47,7 @@ public class userController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> updatePassword(@PathVariable long id,
+    public ResponseEntity<Void> updatePassword(@Valid @PathVariable long id,
                                                @RequestBody UserPasswordDTO dto) {
 
         User userUpdated = userService.updatePassword(id, dto.getCurrentPassword(), dto.getNewPassword(), dto.getConfirmNewPassword());
