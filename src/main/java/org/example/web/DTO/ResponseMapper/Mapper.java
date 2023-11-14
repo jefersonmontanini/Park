@@ -23,9 +23,8 @@ public class Mapper {
                 map().setRole(role);
             }
         };
+
         ModelMapper modelMapper = new ModelMapper();
-
-
         modelMapper.addMappings(props);
         return modelMapper.map(user, UserResponseDTO.class);
     }

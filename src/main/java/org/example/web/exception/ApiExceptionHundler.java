@@ -3,6 +3,7 @@ package org.example.web.exception;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.example.exception.EntityNotFoundException;
+import org.example.exception.PasswordInvalidException;
 import org.example.exception.UserNameUniqueViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -41,5 +42,13 @@ public class ApiExceptionHundler {
                 .status(HttpStatus.NOT_FOUND)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body( new ErrorMessage(request, HttpStatus.NOT_FOUND, exception.getMessage()) );
+    }
+
+    @ExceptionHandler(PasswordInvalidException.class)
+    public ResponseEntity<ErrorMessage> passwordInvalidException(RuntimeException exception, HttpServletRequest request) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, exception.getMessage()));
     }
 }

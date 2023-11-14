@@ -3,6 +3,7 @@ package org.example.web.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.entity.User;
+import org.example.exception.PasswordInvalidException;
 import org.example.service.UserService;
 import org.example.web.DTO.UserCreateDTO;
 import org.example.web.DTO.UserPasswordDTO;
@@ -48,7 +49,7 @@ public class userController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<Void> updatePassword(@Valid @PathVariable long id,
-                                               @RequestBody UserPasswordDTO dto) {
+                                               @RequestBody UserPasswordDTO dto) throws PasswordInvalidException {
 
         User userUpdated = userService.updatePassword(id, dto.getCurrentPassword(), dto.getNewPassword(), dto.getConfirmNewPassword());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
