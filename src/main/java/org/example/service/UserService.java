@@ -2,6 +2,7 @@ package org.example.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.entity.User;
+import org.example.exception.EntityNotFoundException;
 import org.example.exception.UserNameUniqueViolationException;
 import org.example.repository.UsersRepository;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public User getById(Long id) {
         return users.findById(id)
-                .orElseThrow( ()-> new RuntimeException("Usuario não encontrado") );
+                .orElseThrow( ()-> new EntityNotFoundException(String.format("Usuario {id=%s} nao encontrado", id)) );
     }
 
     @Transactional
