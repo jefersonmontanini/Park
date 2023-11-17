@@ -72,4 +72,15 @@ public class UserService {
                 } )
                 .orElseThrow( ()-> new RuntimeException("Usuario nao encontrado") );
     }
+
+    @Transactional(readOnly = true)
+    public User findByUsername(String username) {
+        return users.findByUsername(username)
+                .orElseThrow( ()-> new EntityNotFoundException(String.format("Usuario {username=%s} nao encontrado", username)) );
+    }
+
+    @Transactional(readOnly = true)
+    public User.Role findRoleByUsername(String username) {
+        return users.findRoleByUsername(username);
+    }
 }
