@@ -14,7 +14,7 @@ import javax.management.relation.Role;
 @ToString
 public class UserResponseDTO {
 
+    private Long id;
     private String user;
-    private String password;
     private String role;
 }

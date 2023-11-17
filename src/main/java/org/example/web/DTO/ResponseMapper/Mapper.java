@@ -30,7 +30,7 @@ public class Mapper {
     }
 
     public static List<UserResponseDTO> toListDto(List<User> users) {
-        return users.stream().map( user -> userToDto(user)).collect(Collectors.toList());
+        return users.stream().map(Mapper::userToDto).collect(Collectors.toList());
     }
 
 }

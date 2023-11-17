@@ -53,8 +53,11 @@ public class userController {
                 @ApiResponse(responseCode = "422", description = "recursos nao processado por dados de entrada invalidos",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
                 @ApiResponse(responseCode = "404", description = "Usuario não encontrado no sistema",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "422", description = "Campos inválidos ou mal formatado",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
             }
+
     )
     @PostMapping
     public ResponseEntity<UserResponseDTO> create(@Valid @RequestBody UserCreateDTO userDTO) {

@@ -1,3 +1,2 @@
-INSERT INTO USERS(id, username, password, role) VALUES(100, 'jeferson', '1234', 'ROLE_ADMIN');
-INSERT INTO USERS(id, username, password, role) VALUES(101, 'charles', '1234', 'ROLE_CLIENT');
-INSERT INTO USERS(id, username, password, role) VALUES(102, 'emily', '1234', 'ROLE_CLIENT');
+insert into users (id, `user`, password, role) values (100, 'jefinho', '1234', 'ROLE_ADMIN');
+--INSERT INTO users(id, user, password, role) VALUES(101, 'charles', '1234', 'ROLE_CLIENT');
