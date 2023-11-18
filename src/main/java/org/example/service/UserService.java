@@ -6,6 +6,7 @@ import org.example.exception.EntityNotFoundException;
 import org.example.exception.PasswordInvalidException;
 import org.example.exception.UserNameUniqueViolationException;
 import org.example.repository.UsersRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,10 +17,12 @@ import java.util.List;
 public class UserService {
 
     private final UsersRepository users;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public User save(User user) {
         try {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             return users.save(user);
         }catch (org.springframework.dao.DataIntegrityViolationException exception) {
             throw new UserNameUniqueViolationException(String.format("Username {%s} ja cadastrado", user.getUser()));
@@ -39,10 +42,10 @@ public class UserService {
         }
         return users.findById(id)
                 .map( user -> {
-                    if (!user.getPassword().equals(currentPassword)) {
+                    if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
                         throw new PasswordInvalidException(String.format("A senha atual está incorreta"));
                     }
-                        user.setPassword(newPassword);
+                        user.setPassword(passwordEncoder.encode(newPassword));
                         return user;
                 } )
                 .orElseThrow( ()-> new EntityNotFoundException(String.format("Usuario {id=%s} nao encontrado", id)) );
