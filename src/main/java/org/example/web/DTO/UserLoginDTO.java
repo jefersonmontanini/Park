@@ -12,7 +12,7 @@ import lombok.*;
 @ToString
 public class UserLoginDTO {
 
-    private String username;
+    private String user;
 
     @NotBlank()
     @Size(min = 4, max = 10)

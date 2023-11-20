@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,6 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Slf4j
+
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     @Autowired
@@ -22,9 +24,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        final String token = request.getHeader(JwtUtils.JWR_AUTHORIZATION);
+        final String token = request.getHeader(JwtUtils.JWT_AUTHORIZATION);
 
-        if (token == null || !token.startsWith(JwtUtils.JWT_BEARER)) {
+        if (token == null) {
             log.info("JWT token esta nulo, vazio ou nao iniciado com bearer.");
             filterChain.doFilter(request, response);
             return;

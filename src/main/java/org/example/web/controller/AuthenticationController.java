@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,22 +25,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping
 public class AuthenticationController {
 
-    private JwtUserDetailsService detailsService;
-    private AuthenticationManager authenticationManager ;
+    private final JwtUserDetailsService detailsService;
+    private final AuthenticationManager authenticationManager ;
 
     @PostMapping("/auth")
     public ResponseEntity<?> authentication(@RequestBody @Valid UserLoginDTO dto, HttpServletRequest request) {
-        log.info("Processo de autenticação pelo login {}", dto.getUsername());
+        log.info("Processo de autenticação pelo login {}", dto.getUser());
         try {
             UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword());
+                    new UsernamePasswordAuthenticationToken(dto.getUser(), dto.getPassword());
 
             authenticationManager.authenticate(authenticationToken);
 
-            JwtToken token = detailsService.getTokenAuthenticated(dto.getUsername());
+            JwtToken token = detailsService.getTokenAuthenticated(dto.getUser());
             return ResponseEntity.ok().body(token);
         }catch (AuthenticationException ex) {
-            log.warn("Bad Credentials from username {}", dto.getUsername());
+            log.warn("Bad Credentials from username {}", dto.getUser());
         }
         return ResponseEntity
                 .badRequest()

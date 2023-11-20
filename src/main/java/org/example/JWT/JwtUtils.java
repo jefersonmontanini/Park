@@ -13,13 +13,11 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
-import static org.springframework.security.config.Elements.JWT;
-
 @Slf4j
 public class JwtUtils {
 
     public static final String JWT_BEARER = "bearer";
-    public static final String JWR_AUTHORIZATION = "Authorization";
+    public static final String JWT_AUTHORIZATION = "Authorization";
     public static final String SECRET_KEY = "0123456789-0123456789-0123456789";
     public static final long EXPIRE_DAYS = 0;
     public static final long EXPIRE_HOURS = 0;

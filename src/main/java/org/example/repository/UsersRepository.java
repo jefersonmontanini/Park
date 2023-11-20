@@ -8,8 +8,8 @@ import java.util.Optional;
 
 public interface UsersRepository extends JpaRepository<User, Long> {
 
-    Optional<User> findByUsername(String username);
+    Optional<User> findByUser(String user);
 
-    @Query("select u.role from user u where u.username like :username")
-    User.Role findRoleByUsername(String username);
+    @Query("select u.role from User u where u.user like :user")
+    User.Role findRoleByUser(String user);
 }

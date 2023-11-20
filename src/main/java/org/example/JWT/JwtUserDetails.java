@@ -8,7 +8,7 @@ import java.util.Collection;
 
 public class JwtUserDetails extends User {
 
-    private org.example.entity.User user;
+    private final org.example.entity.User user;
 
     public JwtUserDetails(org.example.entity.User user) {
         super(user.getUser(), user.getPassword(), AuthorityUtils.createAuthorityList(user.getRole().name()));

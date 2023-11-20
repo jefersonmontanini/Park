@@ -77,13 +77,13 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public User findByUsername(String username) {
-        return users.findByUsername(username)
-                .orElseThrow( ()-> new EntityNotFoundException(String.format("Usuario {username=%s} nao encontrado", username)) );
+    public User findByUser(String user) {
+        return users.findByUser(user)
+                .orElseThrow( ()-> new EntityNotFoundException(String.format("Usuario {%s} nao encontrado", user)) );
     }
 
     @Transactional(readOnly = true)
-    public User.Role findRoleByUsername(String username) {
-        return users.findRoleByUsername(username);
+    public User.Role findRoleByUser(String user) {
+        return users.findRoleByUser(user);
     }
 }
