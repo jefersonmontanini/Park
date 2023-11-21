@@ -12,14 +12,13 @@ import lombok.RequiredArgsConstructor;
 import org.example.entity.User;
 import org.example.exception.PasswordInvalidException;
 import org.example.service.UserService;
-import org.example.web.DTO.UserCreateDTO;
-import org.example.web.DTO.UserPasswordDTO;
-import org.example.web.DTO.UserResponseDTO;
-import org.example.web.DTO.ResponseMapper.Mapper;
+import org.example.web.DTO.user.UserCreateDTO;
+import org.example.web.DTO.user.UserPasswordDTO;
+import org.example.web.DTO.user.UserResponseDTO;
+import org.example.web.DTO.ResponseMapper.UserMapper;
 import org.example.web.exception.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,7 +47,7 @@ public class userController {
     @PreAuthorize("hasRole('ADMIN') OR (hasRole('CLIENT') AND #id == authentication.principal.id)")
     public ResponseEntity<UserResponseDTO> getById(@PathVariable Long id) {
         User userById = userService.getById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(Mapper.userToDto(userById));
+        return ResponseEntity.status(HttpStatus.OK).body(UserMapper.userToDto(userById));
     }
 
     @Operation(summary = "Criar um novo usuario", description = "Recurso para criar um novo usuario",
@@ -71,8 +70,8 @@ public class userController {
     )
     @PostMapping
     public ResponseEntity<UserResponseDTO> create(@Valid @RequestBody UserCreateDTO userDTO) {
-        User savedUser = userService.save(Mapper.dtoToUser(userDTO));
-        return ResponseEntity.status(HttpStatus.CREATED).body(Mapper.userToDto(savedUser));
+        User savedUser = userService.save(UserMapper.dtoToUser(userDTO));
+        return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.userToDto(savedUser));
     }
 
     @Operation(summary = "Buscar todos os usuarios", description = "Buscar todos os usuarios",
@@ -88,7 +87,7 @@ public class userController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserResponseDTO>> getAll() {
         List<User> all = userService.getAll();
-        return ResponseEntity.status(HttpStatus.OK).body(Mapper.toListDto(all));
+        return ResponseEntity.status(HttpStatus.OK).body(UserMapper.toListDto(all));
     }
 
     @PutMapping("/{id}")

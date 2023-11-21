@@ -1,20 +1,20 @@
-package org.example.web.DTO;
+package org.example.web.DTO.user;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.example.entity.User;
-
-import javax.management.relation.Role;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class UserResponseDTO {
+public class UserCreateDTO {
 
-    private Long id;
+
     private String user;
-    private String role;
+    @NotBlank()
+    @Size(min = 4, max = 10)
+    private String password;
 }

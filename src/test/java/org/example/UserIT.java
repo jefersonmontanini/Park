@@ -1,7 +1,7 @@
 package org.example;
 
-import org.example.web.DTO.UserCreateDTO;
-import org.example.web.DTO.UserResponseDTO;
+import org.example.web.DTO.user.UserCreateDTO;
+import org.example.web.DTO.user.UserResponseDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

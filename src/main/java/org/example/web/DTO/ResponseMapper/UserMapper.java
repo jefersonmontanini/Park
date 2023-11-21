@@ -1,15 +1,15 @@
 package org.example.web.DTO.ResponseMapper;
 
 import org.example.entity.User;
-import org.example.web.DTO.UserResponseDTO;
-import org.example.web.DTO.UserCreateDTO;
+import org.example.web.DTO.user.UserResponseDTO;
+import org.example.web.DTO.user.UserCreateDTO;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Mapper {
+public class UserMapper {
 
     public static User dtoToUser(UserCreateDTO createDTO) {
         return new ModelMapper().map(createDTO, User.class);
@@ -30,7 +30,7 @@ public class Mapper {
     }
 
     public static List<UserResponseDTO> toListDto(List<User> users) {
-        return users.stream().map(Mapper::userToDto).collect(Collectors.toList());
+        return users.stream().map(UserMapper::userToDto).collect(Collectors.toList());
     }
 
 }
