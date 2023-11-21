@@ -16,12 +16,12 @@ import java.util.Date;
 @Slf4j
 public class JwtUtils {
 
-    public static final String JWT_BEARER = "bearer";
+    public static final String JWT_BEARER = "Bearer ";
     public static final String JWT_AUTHORIZATION = "Authorization";
     public static final String SECRET_KEY = "0123456789-0123456789-0123456789";
     public static final long EXPIRE_DAYS = 0;
-    public static final long EXPIRE_HOURS = 0;
-    public static final long  EXPIRE_MINUTES = 2;
+    public static final long EXPIRE_HOURS = 2;
+    public static final long  EXPIRE_MINUTES = 0;
 
     private JwtUtils() {
     }
@@ -58,7 +58,7 @@ public class JwtUtils {
                     .setSigningKey(generateKey()).build()
                     .parseClaimsJws(refactorToken(token)).getBody();
         }catch (JwtException ex){
-            log.error(String.format("Token invalido %s", ex.getMessage()));
+            log.error(String.format(" esse Token invalido %s", ex.getMessage()));
         }
         return null;
     }
@@ -81,7 +81,7 @@ public class JwtUtils {
 
     private static String refactorToken( String token) {
         if(token.contains(JWT_BEARER)){
-            token.substring(JWT_BEARER.length());
+            return token.substring(JWT_BEARER.length());
         }
         return token;
     }
