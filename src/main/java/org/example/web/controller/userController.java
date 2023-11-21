@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,10 +34,13 @@ public class userController {
     private final UserService userService;
 
     @Operation(summary = "Buscar um usuario pelo Id", description = "Recurso para encontrar um usuario pelo id",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Usuario encontrado com sucesso",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponseDTO.class))),
                     @ApiResponse(responseCode = "404", description = "Usuario não encontrado no sistema",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "403", description = "Usuario sem permissão para acessae este recurso",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
             }
     )
@@ -48,6 +52,7 @@ public class userController {
     }
 
     @Operation(summary = "Criar um novo usuario", description = "Recurso para criar um novo usuario",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                 @ApiResponse(responseCode = "201", description = "Recurso criado com sucesso",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponseDTO.class))),
@@ -58,6 +63,8 @@ public class userController {
                 @ApiResponse(responseCode = "404", description = "Usuario não encontrado no sistema",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
                     @ApiResponse(responseCode = "422", description = "Campos inválidos ou mal formatado",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "403", description = "Usuario sem permissão para acessae este recurso",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
             }
 
@@ -69,12 +76,16 @@ public class userController {
     }
 
     @Operation(summary = "Buscar todos os usuarios", description = "Buscar todos os usuarios",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Usuarios encontrados com sucesso",
-                            content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = UserResponseDTO.class))))
+                            content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = UserResponseDTO.class)))),
+                    @ApiResponse(responseCode = "403", description = "Usuario sem permissão para acessae este recurso",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
             }
     )
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserResponseDTO>> getAll() {
         List<User> all = userService.getAll();
         return ResponseEntity.status(HttpStatus.OK).body(Mapper.toListDto(all));
@@ -88,16 +99,20 @@ public class userController {
     }
 
     @Operation(summary = "Alterar senha de um usuario", description = "Alterar senha de um usuario",
+            security = @SecurityRequirement(name = "security"),
             responses = {
                     @ApiResponse(responseCode = "204", description = "A senha foi alterada com sucesso",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))),
                     @ApiResponse(responseCode = "404", description = "Usuario não encontrado no sistema",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
                     @ApiResponse(responseCode = "400", description = "Senhas não conferem",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "403", description = "Usuario sem permissão para acessae este recurso",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
             }
     )
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CLIENT') AND (#id == authentication.principal.id)")
     public ResponseEntity<Void> updatePassword(@Valid @PathVariable long id,
                                                @RequestBody UserPasswordDTO dto) throws PasswordInvalidException {
 

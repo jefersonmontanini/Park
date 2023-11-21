@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -24,6 +25,13 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @Configuration
 public class SpringSecurityConfig {
 
+//    private static final String[] DOCUMENTATION_OPENAPI = {
+//            "docs/index.html",
+//            "docs-park.html", "docs-park/**",
+//            "/v3/api-docs/**",
+//            "/swagger-ui-custom.html", "swagger-ui.html", "/swagger-ui/**",
+//            "/**.html", "webjars/**", "configurations/**", "swagger-resources/**"
+//    };
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
@@ -33,6 +41,17 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(new AntPathRequestMatcher("/users", "POST")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/auth", "POST")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/docs/index.html", "GET")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/docs-park.html", "GET")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/docs-park/**", "GET")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/api-docs/**", "GET")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/swagger-ui-custom.html", "GET")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/swagger-ui.html", "GET")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**", "GET")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/**.html", "GET")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/webjars/**", "GET")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher( "/configurations/**", "GET")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher( "/swagger-resources/**", "GET")).permitAll()
 //                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
 //                        .requestMatchers(HttpMethod.POST, "/auth").permitAll()
                         .anyRequest().authenticated()
