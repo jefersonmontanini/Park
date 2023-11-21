@@ -4,6 +4,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -11,6 +16,7 @@ import java.util.Objects;
 
 @Getter @Setter
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "users")
 public class User implements Serializable {
@@ -30,15 +36,19 @@ public class User implements Serializable {
     @Column(length = 100, nullable = false)
     private Role role = Role.ROLE_CLIENT;
 
+    @CreatedDate
     @Column
     private LocalDateTime createDate;
 
+    @LastModifiedDate
     @Column
     private LocalDateTime changeDate;
 
+    @CreatedBy
     @Column
     private String createBy;
 
+    @LastModifiedBy
     @Column
     private String changeBy;
 
