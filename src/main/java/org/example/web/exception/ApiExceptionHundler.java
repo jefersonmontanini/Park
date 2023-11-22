@@ -2,10 +2,7 @@ package org.example.web.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.example.exception.CpfUniqueViolationException;
-import org.example.exception.EntityNotFoundException;
-import org.example.exception.PasswordInvalidException;
-import org.example.exception.UserNameUniqueViolationException;
+import org.example.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +25,7 @@ public class ApiExceptionHundler {
                 .body(new ErrorMessage(request, HttpStatus.UNPROCESSABLE_ENTITY, "Campos(s) invalido(s)", result ));
     }
 
-    @ExceptionHandler({UserNameUniqueViolationException.class, CpfUniqueViolationException.class})
+    @ExceptionHandler({UserNameUniqueViolationException.class, CpfUniqueViolationException.class, CodeUniqueViolationException.class})
     public ResponseEntity<ErrorMessage> UserNameUniqueViolationException(RuntimeException exception, HttpServletRequest request) {
         log.error("Api Error -", exception);
         return ResponseEntity
