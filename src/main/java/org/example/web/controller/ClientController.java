@@ -122,6 +122,18 @@ public class ClientController {
         return ResponseEntity.ok(PageableMapper.toDTO(clients));
     }
 
+
+    @Operation(summary = "Buscar todos clientes", description = "Buscar todos os clientes",
+            security = @SecurityRequirement(name = "security"),
+            responses = {
+            @ApiResponse(responseCode = "200", description = "cliente encontrado com sucesso",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponseDTO.class))),
+            @ApiResponse(responseCode = "404", description = "cliente não encontrado no sistema",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
+            @ApiResponse(responseCode = "403", description = "cliente sem permissão para acessae este recurso",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
+        }
+    )
     @GetMapping("/details")
     @PreAuthorize("hasRole('CLIENT')")
     public ResponseEntity<ClientResponseDTO> getDetails(@AuthenticationPrincipal JwtUserDetails userDetails) {
