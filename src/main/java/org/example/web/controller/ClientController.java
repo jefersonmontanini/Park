@@ -121,4 +121,11 @@ public class ClientController {
         Page<ClientProjection> clients = clientService.getAll(pageable);
         return ResponseEntity.ok(PageableMapper.toDTO(clients));
     }
+
+    @GetMapping("/details")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ResponseEntity<ClientResponseDTO> getDetails(@AuthenticationPrincipal JwtUserDetails userDetails) {
+        Client client = clientService.findByUserId(userDetails.getId());
+        return ResponseEntity.ok(ClientMapper.toDTO(client));
+    }
 }
