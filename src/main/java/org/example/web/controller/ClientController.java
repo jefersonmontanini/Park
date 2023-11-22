@@ -2,6 +2,8 @@ package org.example.web.controller;
 
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -11,7 +13,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.JWT.JwtUserDetails;
 import org.example.entity.Client;
-import org.example.entity.User;
 import org.example.exception.CpfUniqueViolationException;
 import org.example.repository.projection.ClientProjection;
 import org.example.service.ClientService;
@@ -25,12 +26,11 @@ import org.example.web.DTO.user.UserResponseDTO;
 import org.example.web.exception.ErrorMessage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Tag(name = "Users", description = "Contem todas as operaçoes relativas aos recursos sobre edição e leitura de um cliente.")
 @RestController
@@ -92,18 +92,32 @@ public class ClientController {
 
     @Operation(summary = "Buscar todos clientes", description = "Buscar todos os clientes",
             security = @SecurityRequirement(name = "security"),
+            parameters = {
+                @Parameter(in = ParameterIn.QUERY, name = "page",
+                        content = @Content(schema = @Schema(type = "integer", defaultValue = "0")),
+                        description = "Representa pagina retornada"
+                ),
+                @Parameter(in = ParameterIn.QUERY, name = "sort",
+                        content = @Content(schema = @Schema(type = "integer", defaultValue = "20")),
+                        description = "Representa total de elementos por pagina"
+                ),
+                @Parameter(in = ParameterIn.QUERY, name = "sort", hidden = true,
+                        content = @Content(schema = @Schema(type = "string", defaultValue = "id,asc")),
+                        description = "Representa a ordenação dos resultados. Aceita multiplos critérios de ordenação"
+                ),
+            },
             responses = {
-                    @ApiResponse(responseCode = "200", description = "cliente encontrado com sucesso",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponseDTO.class))),
-                    @ApiResponse(responseCode = "404", description = "cliente não encontrado no sistema",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
-                    @ApiResponse(responseCode = "403", description = "cliente sem permissão para acessae este recurso",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
+                @ApiResponse(responseCode = "200", description = "cliente encontrado com sucesso",
+                        content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponseDTO.class))),
+                @ApiResponse(responseCode = "404", description = "cliente não encontrado no sistema",
+                        content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
+                @ApiResponse(responseCode = "403", description = "cliente sem permissão para acessae este recurso",
+                        content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
             }
     )
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<PageableDTO> getAll(Pageable pageable) {
+    public ResponseEntity<PageableDTO> getAll(@Parameter(hidden = true) @PageableDefault(size = 5, sort = {"nome"}) Pageable pageable) {
         Page<ClientProjection> clients = clientService.getAll(pageable);
         return ResponseEntity.ok(PageableMapper.toDTO(clients));
     }
