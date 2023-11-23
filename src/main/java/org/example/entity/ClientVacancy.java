@@ -55,12 +55,12 @@ public class ClientVacancy {
     private BigDecimal discount;
 
     @ManyToOne
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "id_client", nullable = false)
     private Client client;
 
 
     @ManyToOne
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "id_vacancy", nullable = false)
     private Vacancy vacancy;
 
     @CreatedDate
