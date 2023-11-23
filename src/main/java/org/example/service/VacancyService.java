@@ -8,7 +8,6 @@ import org.example.repository.VacancyRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @Service
 @RequiredArgsConstructor
@@ -29,5 +28,11 @@ public class VacancyService {
     @Transactional(readOnly = true)
     public Vacancy getByCode(String code) {
         return vacancyRepository.findByCode(code).orElseThrow( ()-> new EntityNotFoundException(String.format("Vaga com codigo '%s' ja nao foi encontrada", code)));
+    }
+
+    @Transactional(readOnly = true)
+    public Vacancy findByFreeVacancy() {
+        return vacancyRepository.findFirstByStatus(Vacancy.StatusVacancy.FREE)
+                .orElseThrow( ()-> new EntityNotFoundException("Nenhuma vaga livre foi encontrada") );
     }
 }
